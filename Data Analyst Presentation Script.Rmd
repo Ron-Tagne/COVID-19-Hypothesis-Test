@@ -1,0 +1,96 @@
+---
+title: "Data Analyst Presentation"
+output: html_document
+date: "2023-03-27"
+---
+
+# Load libraries 
+```{r}
+library(readr)
+library(ggplot2)
+library(dplyr)
+```
+
+#Import Dataset
+```{r}
+Clibrary(readr)
+df <- read_csv("OneDrive/Data Science/Projects/COVID-19 Stat Aanalysis /data_mexico_400_145_22.csv")
+View(df)
+head(df)
+```
+
+# Research Question: 
+Are Age and BMI significant predictors of the number of days from symptom onset to admission? 
+
+# Variables:
+  IV: Age & BMI_Category # Continuous & Categorical
+  DV: Days_sympt_admiss- #Continuous
+
+# Hypothesis
+H0: Combined, age and BMI do not explain variation in the number for days from symptom 
+  onset to admission. 
+
+H1: Combined, age and BMI do explain variation in the number for days from symptom 
+onset to admission. 
+
+H0Age: Age does not explain variation in the number for days from symptom 
+onset to admission. 
+H1Age: Age does explain variation in the number for days from symptom 
+onset to admission. 
+
+H0BMI: BMI does explain variation in the number for days from symptom 
+onset to admission. 
+H1BMI: BMI does explain variation in the number for days from symptom 
+onset to admission. 
+
+#Data Exploration
+# Missing Values: 
+#Age
+```{r}
+summary(df$Age)
+count(filter(df, df$Age == '9999'))
+df1 <- subset(df, !(df$Age == '9999')) # 5 missing values removed
+```
+
+#BMI
+```{r}
+summary(df1$BMI)
+table(df1$BMI)
+```
+
+# Days_sympt_admiss
+```{r}
+summary(df1$Days_sympt_admiss)
+table(df1$Days_sympt_admiss)
+```
+# Scatter-plot:
+
+# Age ~ Days_sympt_admiss
+```{r}
+qplot(x = Age, y = Days_sympt_admiss, data = df1) + geom_smooth(method = lm, formula = y ~ x)
+```
+
+# BMI ~ Days_sympt_admiss
+```{r}
+qplot(x = BMI, y = Days_sympt_admiss, data = df1) + geom_smooth(method = lm, formula = y ~ x)
+```
+
+# Build a regression model
+```{r}
+model1 <- lm(df1$Days_sympt_admiss~ df1$Age+ df1$BMI, data = df1)
+```
+
+# Assess the model
+```{r}
+summary(model1)
+plot(model1, which = 1)
+plot(model1, which = 2)
+```
+
+
+
+
+
+
+
+
